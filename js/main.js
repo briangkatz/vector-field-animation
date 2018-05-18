@@ -17,7 +17,7 @@ map.fitBounds(bounds);  // fit the map bounds to the bounding box specified
 
 // ScalarField derived from a Vectorfield (from IHCantabria Leaflet.CanvasLayer.Field)
 d3.text('assets/arag_2050_07_u.asc', function (u) { // add the U data in ASCIIGrid (.asc) format
-    d3.text('assets/arag_2050_07_v.asc', function (v) { // add the V data in ASCIIGrid (.asc) format
+    d3.text('assets/arag_2050_07_v.asc', function (v) { // add the V data in ASCIIGrid (.asc) format (if you want to see a flowing example, replace the V data with the v data (arag_2050_07_v_original.asc)
         var toMetersPerSecond = 0.5; // coefficient multiplied with the U and V data to determine the speed (magnitude) of the animated vector field; larger coefficient result in faster animation speeds (larger magnitudes), smaller coefficient (i.e. decimals) result in slower animation speeds (smaller magnitudes); **This number may need to be modified to normalize the data values as close to their original values as possible. A coefficient very large will overstate the data values, and a small coefficient may understate the data values** Original example was 0.001
         var vf = L.VectorField.fromASCIIGrids(u, v, toMetersPerSecond);  // create the vector field
 
@@ -26,9 +26,9 @@ d3.text('assets/arag_2050_07_u.asc', function (u) { // add the U data in ASCIIGr
         // custom scale, based on 'earth.nullschool.net' (example:  https://earth.nullschool.net/#current/ocean/surface/currents/overlay=currents/equirectangular=-11.95,29.62,1112)
         var magnitude = L.canvasLayer.scalarField(s, {
             color: chroma.scale(
-                ['#DC4404', '#F3BB3B', '#DCDBDB', '#84AEC8', '#5581BA'], [1.0, 1.4, 1.8, 2.2, 2.6]  // set color scale and break points for styling of magnitude layer
+                ['#E0631D', '#E0631D', '#A5BF15', '#FFFFFF', '#C9F5F6'], [1.0, 1.4, 1.8, 2.2, 2.6]  // set color scale and break points for styling of magnitude layer
             ),
-            opacity: 0.5 // 1 will block view of animation if magnitude layer is selected and brought to the front of the map object
+            opacity: 0.75 // 1 will block view of animation if magnitude layer is selected and brought to the front of the map object
         }).addTo(map);  // addTo(map) displays the layer on page-load vs. removing it keeps the layer off the map until the check-box is selected in the Leaflet layer control (see direction layer below for example)
 
         // b) Second derived field: DirectionFrom (º): (0 to 360º) | N is 0º and E is 90º

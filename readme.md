@@ -1,12 +1,12 @@
 # Leaflet Vector Field Animation
 
-**Raster to Animated Vector** | **Updated: 05/15/2018** | **ASCII Raster Data (*.asc)** | **Contributor:** [Brian Katz](https://github.com/briangkatz)
+**Raster to Animated Vector** | **Updated: 05/17/2018** | **ASCII Raster Data (*.asc)** | **Contributor:** [Brian Katz](https://github.com/briangkatz)
 
 #### *WORK IN PROGRESS - MATERIAL IS STILL BEING ADDED TO PARTS 2 AND 3*
 
 ![Vector Field Animation](img/vector_field.jpg)
 
-This module allows you to convert a raster dataset to an animated vector field which visualizes the magnitude and direction of the raster data's pixel values.
+This module allows you to convert a continuous raster dataset into an animated vector field which visualizes the magnitude and direction of the raster data's pixel values.
 
 [**Demo**](index.html)
 
@@ -98,32 +98,44 @@ This module requires raster data in *ASCII Grid format* (*.asc).
 
 Before visualization, each raster you begin with must be processed into **two ASCII files** that represent vector components of your original data. These components are called  **U** and **V**.
 
-- **V** is the **magnitude** of the data
-- **U** is the **direction** of the data
+- **V** relates to the vector **magnitude**
+- **U** relates to the vector **direction**
 
 ![Vector Components](img/vector_components.png)
 
 Source: [Elementary Vector Analysis](https://www.math.hmc.edu/calculus/tutorials/vectoranalysis/vectoranalysis.pdf)
 
-The following steps lay out a workflow to process a raster file into two U and V raster files:
-
-### 2.1 Starting raster data (magnitude)
+In the figure above, the perpendicular lines represent the **V** (blue) and **U** (red) vector components that the Leaflet.CanvasLayer.Field library uses to dynamically calculate and animate the original data's magnitude (pixel values). Thus, the *green* line labeled **v** represents your starting ASCII raster that you want visualized from two other ASCII rasters, **V** and **U**.
 
 
 
-### 2.2 DEM
+The following sections lay out a workflow to:
+
+1. Start with an ASCII file (**v**)
+
+2. Create a "theta" raster (**&theta;**) using the DEM and Aspect tools in ArcGIS
+
+3. Convert the **&theta;** raster from *aspect* degrees to *math* degrees
+
+4. Calculate **V** and **U** rasters from the **v** and **&theta;** rasters
+
+   ​
+
+### 2.1 Start with an ASCII file (**v**)
+
+In the `assets` folder, you'll see the original raster file used in this example:  `arag_2050_07_v_original.asc`. This data represents projected aragonite saturation state in July 2050, and it is sourced from an ocean acidification (OA) model output by [Hauri and Gruber et al. 2013](https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1002/grl.50618). Aragonite saturation state is a measure of water corrosivity to bivalve shell-development, a proxy for OA intensity.
+
+### 2.2 Create a "theta" raster (**&theta;**) using DEM and Aspect tools in ArcGIS
 
 
 
-### 2.3 Aspect
+### 2.3 Convert the **&theta;** raster from *aspect* degrees to *math* degrees
 
 
 
-### 2.4 Convert <u>aspect</u> direction to <u>VECTOR</u> direction (theta)
+### 2.4 Calculate **V** and **U** rasters from the **v** and **&theta;** rasters
 
 
-
-### 2.5 Calculate U and V rasters from <u>magnitude</u> and <u>direction</u> rasters 
 
 
 
