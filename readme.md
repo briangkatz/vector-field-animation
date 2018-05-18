@@ -6,6 +6,8 @@
 
 ![Vector Field Animation](img/vector_field.jpg)
 
+![OA Hotspots July 2050](img/vector_field2.jpg)
+
 This module allows you to convert a continuous raster dataset into an animated vector field which visualizes the magnitude and direction of the raster data's pixel values.
 
 [**Demo**](https://briangkatz.github.io/vector-field-animation/)
