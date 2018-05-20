@@ -56,9 +56,24 @@ d3.text('assets/arag_2050_07_u.asc', function (u) { // add the U data in ASCIIGr
             "Derived magnitude": magnitude,
             "Derived direction": direction,
         }, {
-            position: 'bottomright',  // change to your preference
+            position: 'topright',  // change to your preference
             collapsed: true  // false always displays check-boxes for the animation, magnitude, and direction layers; true creates a layer-selector icon which hides these check-boxes until hovered over or clicked on
         }).addTo(map);
+
+        // define legend
+        var legend = L.control({position: 'bottomright'});
+        // set legend color scale and breaks
+        legend.onAdd = function () {
+            var div = L.DomUtil.create('div', 'legend legend-colors');
+            div.innerHTML += '<b>Projected &Omega;<sub>ar</sub> Saturation State in July 2050</b><br><br>';
+            div.innerHTML += '<i style="background: ' + '#E0631D' + '; opacity: 1"></i><p>Below 1.4</p><br>';
+            div.innerHTML += '<i style="background: ' + '#A5BF15' + '; opacity: 1"></i><p>1.4 - 1.8</p><br>';
+            div.innerHTML += '<i style="background: ' + '#ffffff' + '; opacity: 1"></i><p>1.8 - 2.2</p><br>';
+            div.innerHTML += '<i style="background: ' + '#C9F5F6' + '; opacity: 1"></i><p>2.2 - 2.6</p>';
+            return div;
+        };
+
+        legend.addTo(map);
 
         // create a popup displaying magnitude values when a pixel is clicked
         magnitude.on('click', function (e) {
