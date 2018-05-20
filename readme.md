@@ -6,8 +6,6 @@
 
 ![Vector Field Animation](img/vector_field.jpg)
 
-![OA Hotspots July 2050](img/vector_field2.jpg)
-
 This module allows you to convert a continuous raster dataset into an animated vector field which visualizes the magnitude and direction of the raster data's pixel values.
 
 [**Demo**](https://briangkatz.github.io/vector-field-animation/)
@@ -189,7 +187,7 @@ We'll use the Raster Calculator tool in QGIS to perform the following functions:
       - (where your final, processed **U** and **V** *ASCII* files will be saved)
     - Output format: `Arc/Info ASCII Grid (*.asc *.ASC)`
     - Target SRS: `EPSG:4326` (web mercator)
-    - Click OK and your final **U** and **V** ASCII files should now be ready for visualization in the `assets` folder
+    - Click OK and your final **U** and **V** ASCII files should now be ready for visualization in the `assets` folder:
       - `arag_2050_07_u.asc`
       - `arag_2050_07_v.asc`
 
@@ -215,6 +213,8 @@ We'll use the Raster Calculator tool in QGIS to perform the following functions:
 
     - You may do this manually...or with Python:
 
+      - Close QGIS
+
       - Move the `arag_2050_07_u.tif.asc` &`arag_2050_07_v.tif.asc` files into the `assets` folder
 
       - Open Command Prompt
@@ -228,32 +228,43 @@ We'll use the Raster Calculator tool in QGIS to perform the following functions:
 
       - Initiate Python
 
+        ``` python
+        # Initiate the Python interpreter
+        python
+        ```
+
         ![Python 2](img/raster_to_u_v/step3python2.png)
 
-        ​
+      - Enter the following Python commands (without the comments):
 
-        ​
+        ``` python
+        # Rename files in a directory
+
+        import os
+
+        # specify the directory of files to iterate through
+        dirname = "C:\\Workspace\\vector-field-animation\\assets"
+
+        # iterate through files and remove some specified text if it's found in the file name
+        for filename in os.listdir(dirname):
+            # use the replace() function to blank out text, i.e. replace('text_you_want_to_remove', '') 
+            os.rename(filename, filename.replace('.tif', ''))
+        ```
+
+        ![Python 3](img/raster_to_u_v/step3python3.png)
+
+      - You may remove the .xml and .prj files in `assets` - they are not needed for the visualization
+
+      - Your final **U** and **V** ASCII files should now be ready for visualization in the `assets` folder:
+
+        - `arag_2050_07_u.asc`
+        - `arag_2050_07_v.asc`
 
 
 
-- Enter the following commands (without the comments):
+##### Now we're finally ready to dive into the functions of the Leaflet.CanvasField.Layer library with our processed data.
 
-```python
-# Rename files in a directory
-
-import os
-
-# specify the directory of files to iterate through
-dirname = "C:\\Workspace\\oa-hotspots\\uv_asc"
-
-# iterate through files and remove some specified text if it's found in the file name
-for filename in os.listdir(dirname):
-    # use the replace() function to blank out text, i.e. replace('text_you_want_to_remove', '') 
-    os.rename(filename, filename.replace('.tif', ''))
-
-    
-print("Finished renaming files")
-```
+​	:fireworks:👏 👏 👏		**Woohoo!**	 :clap: :clap: :clap: :fireworks:
 
 
 
