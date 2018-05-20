@@ -67,10 +67,8 @@ In your IDE (Webstorm), open `index.html` to prepare for editing.
 This module nests the map div within a "map-container" div in order to scale the module down to 400px by 400px with top/bottom margins of 30px and left/right margins of 20px. The margins are set by CSS styling assigned by id="map-container" in the `main.css` file
 
 ``` html
-<!-- Create the Map div with a surrounding container -->
-<div id="map-container">
-    <div id="map"></div>
-</div>
+<!-- Create the Map div -->
+<div id="map"></div>
 ```
 
 
@@ -79,10 +77,8 @@ This module nests the map div within a "map-container" div in order to scale the
 
 ``` html
 <body>
-    <!-- Create the Map div with a surrounding container -->
-    <div id="map-container">
-        <div id="map"></div>
-    </div>
+    <!-- Create the Map div -->
+    <div id="map"></div>
 
     <!-- Leaflet CanvasLayer.Field JavaScript -->
     <script src="js/leaflet.canvaslayer.field.js"></script>
@@ -125,7 +121,7 @@ The following sections lay out a workflow to:
 
 In the `assets` folder, you'll see the original raster file used in this example:  `arag_2050_07_v_original.asc`. This data represents projected aragonite saturation state in July 2050, and it is sourced from an ocean acidification (OA) model output by [Hauri and Gruber et al. 2013](https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1002/grl.50618). Aragonite saturation state is a measure of water corrosivity to bivalve shell-development, a proxy for OA intensity.
 
-Step 1: Open `arag_2050_07_v_original.asc` in QGIS
+##### Step 1: Open `arag_2050_07_v_original.asc` in QGIS
 
 ![arag_2050_07_v_original.asc](img/raster_to_u_v/step1.png)
 
@@ -133,27 +129,131 @@ Step 1: Open `arag_2050_07_v_original.asc` in QGIS
 
 ### 2.2 Create a "theta" raster (**&theta;**) using the DEM Aspect tool in QGIS
 
-Step 2: From the QGIS menu, go to `Raster > Analysis > DEM (Terrain Models)`
+##### Step 2: From the QGIS menu, go to `Raster > Analysis > DEM (Terrain Models)`
 
 - Save the output file to the `pre_processing` folder as `arag_2050_07_v_aspect_trig.asc`
 - Select Mode: Aspect
-- Check the `Return trigonometric angle (instead of azimuth)` box!
+- Check the `Return trigonometric angle (instead of azimuth)` box - **very important!**
 - Click OK
 
 ![arag_2050_07_v_aspect_trig.asc](img/raster_to_u_v/step2.png)
 
-Or use the following GDAL command in OSGeo4W:
+Alternatively, use the following GDAL command in OSGeo4W:
 
 ```python
 # GDAL DEM Aspect w/Trigonometric Angle
+gdaldem aspect input_file output_file -trigonometric -of AAIGrid
+
+# Step 2.2 Example
 gdaldem aspect C:/Workspace/vector-field-animation/assets/arag_2050_07_v_original.asc C:/Workspace/vector-field-animation/assets/pre_processing/arag_2050_07_v_aspect_trig.asc -trigonometric -of AAIGrid
 ```
+
+The resulting output file `arag_2050_07_v_aspect_trig.asc` is your **&theta;** raster to use in the next step.
 
 
 
 ### 2.3 Calculate **V** and **U** rasters from the **v** and **&theta;** rasters
 
+Now we have our magnitude (**v**) and direction (**&theta;**) rasters from which we can calculate our **U** and **V** rasters.
 
+We'll use the Raster Calculator tool in QGIS to perform the following functions:
+
+**U** = **v** * cos(**&theta;**) =  `arag_2050_07_v_original.asc` * cos(`arag_2050_07_v_aspect_trig.asc`)
+
+​	**U** = `arag_2050_07_u.asc`
+
+**V** = **v** * sin(**&theta;**) =  `arag_2050_07_v_original.asc` * sin(`arag_2050_07_v_aspect_trig.asc`)
+
+​	**V** = `arag_2050_07_v.asc`
+
+##### Step 3: From the QGIS Menu, go to `Raster > Raster Calculator...`
+
+- Save the output file to the `processed` folder as `arag_2050_07_u.tif`
+
+  - The Raster Calculator in QGIS doesn't allow you to select ASCII *.asc format from the interface, so we have to save as a GeoTIFF here before converting back to ASCII for use by L.CanvasField.Layer.js
+
+  ![arag_2050_07_u.tif](img/raster_to_u_v/step3u.png)
+
+- Repeat the process for an `arag_2050_07_v.tif` file
+
+  ![arag_2050_07_u.tif](img/raster_to_u_v/step3v.png)
+
+- Now convert the *.tif files back to *.asc and place the final **U** and **V** output rasters in the `assets` folder
+
+  - ##### From the QGIS menu, go to `Raster > Conversion > Translate (Convert Format)...` 
+
+    - Check the `Batch mode (for processing whole directory)` box
+    - Input directory: `C:\Workspace\vector-field-animation\assets\processed`
+      - (where your **U** and **V** *GeoTIFF* files are located)
+    - Output directory: `C:\Workspace\vector-field-animation\assets`
+      - (where your final, processed **U** and **V** *ASCII* files will be saved)
+    - Output format: `Arc/Info ASCII Grid (*.asc *.ASC)`
+    - Target SRS: `EPSG:4326` (web mercator)
+    - Click OK and your final **U** and **V** ASCII files should now be ready for visualization in the `assets` folder
+      - `arag_2050_07_u.asc`
+      - `arag_2050_07_v.asc`
+
+  - ##### If the method above doesn't work, use GDAL:
+
+    - Open the OSGeo4W Shell and enter the following commands:
+
+    ``` python
+    # Enter the folder where the U and V .tif files are located
+    cd C:\Workspace\vector-field-animation\assets\processed
+    ```
+
+    ![GDAL 1](img/raster_to_u_v/step3gdal1.png)
+
+    ``` python
+    # Batch process .tif files to .asc using GDAL TRANSLATE
+    for %i in (*.tif) do gdal_translate -of AAIGrid %i %i.asc
+    ```
+
+    ![GDAL 2](img/raster_to_u_v/step3gdal2.png)
+
+    - Your output files are now called `arag_2050_07_u.tif.asc` and `arag_2050_07_v.tif.asc` so we must now change the file names to remove the extra .tif extension
+
+    - You may do this manually...or with Python:
+
+      - Move the `arag_2050_07_u.tif.asc` &`arag_2050_07_v.tif.asc` files into the `assets` folder
+
+      - Open Command Prompt
+
+        ``` python
+        # Enter the assets folder in your vector-field-animation repository folder
+        cd C:\Workspace\vector-field-animation\assets
+        ```
+
+        ![Python 1](img/raster_to_u_v/step3python1.png)
+
+      - Initiate Python
+
+        ![Python 2](img/raster_to_u_v/step3python2.png)
+
+        ​
+
+        ​
+
+
+
+- Enter the following commands (without the comments):
+
+```python
+# Rename files in a directory
+
+import os
+
+# specify the directory of files to iterate through
+dirname = "C:\\Workspace\\oa-hotspots\\uv_asc"
+
+# iterate through files and remove some specified text if it's found in the file name
+for filename in os.listdir(dirname):
+    # use the replace() function to blank out text, i.e. replace('text_you_want_to_remove', '') 
+    os.rename(filename, filename.replace('.tif', ''))
+
+    
+print("Finished renaming files")
+```
 
 
 
