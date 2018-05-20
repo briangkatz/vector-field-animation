@@ -5,16 +5,16 @@ body {
 }
 
 #map {
-    height: 340px;
-    width: 360px;
+    height: 100%;
+    width: 100%;
     position: absolute;
-    top: 30px;
-    left: 20px;
+    top: 0;
+    left: 0;
 }
 
 #map-container {
-    height: 400px;
-    width: 400px;
+    height: 100%;
+    width: 100%;
 }
 
 .title {

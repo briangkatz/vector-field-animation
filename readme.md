@@ -115,11 +115,9 @@ The following sections lay out a workflow to:
 
 1. Start with an ASCII file (**v**)
 
-2. Create a "theta" raster (**&theta;**) using the DEM and Aspect tools in ArcGIS
+2. Create a "theta" raster (**&theta;**) in *math degrees* using the DEM Aspect tool in QGIS
 
-3. Convert the **&theta;** raster from *aspect* degrees to *math* degrees
-
-4. Calculate **V** and **U** rasters from the **v** and **&theta;** rasters
+3. Calculate **V** and **U** rasters from the **v** and **&theta;** rasters
 
    ​
 
@@ -127,15 +125,33 @@ The following sections lay out a workflow to:
 
 In the `assets` folder, you'll see the original raster file used in this example:  `arag_2050_07_v_original.asc`. This data represents projected aragonite saturation state in July 2050, and it is sourced from an ocean acidification (OA) model output by [Hauri and Gruber et al. 2013](https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1002/grl.50618). Aragonite saturation state is a measure of water corrosivity to bivalve shell-development, a proxy for OA intensity.
 
-### 2.2 Create a "theta" raster (**&theta;**) using DEM and Aspect tools in ArcGIS
+Step 1: Open `arag_2050_07_v_original.asc` in QGIS
+
+![arag_2050_07_v_original.asc](img/raster_to_u_v/step1.png)
 
 
 
-### 2.3 Convert the **&theta;** raster from *aspect* degrees to *math* degrees
+### 2.2 Create a "theta" raster (**&theta;**) using DEM and Aspect tools in QGIS
+
+Step 2: From the QGIS menu, go to `Raster > Analysis > DEM (Terrain Models)`
+
+- Save the output file to the `pre_processing` folder as `arag_2050_07_v_aspect_trig.asc`
+- Select Mode: Aspect
+- Check the `Return trigonometric angle (instead of azimuth)` box!
+- Click OK
+
+![arag_2050_07_v_aspect_trig.asc](img/raster_to_u_v/step2.png)
+
+Or use the following GDAL command in OSGEO4W:
+
+```python
+# GDAL DEM Aspect w/Trigonometric Angle
+gdaldem aspect C:/Workspace/vector-field-animation/assets/arag_2050_07_v_original.asc C:/Workspace/vector-field-animation/assets/pre_processing/arag_2050_07_v_aspect_trig.asc -trigonometric -of AAIGrid
+```
 
 
 
-### 2.4 Calculate **V** and **U** rasters from the **v** and **&theta;** rasters
+### 2.3 Calculate **V** and **U** rasters from the **v** and **&theta;** rasters
 
 
 
