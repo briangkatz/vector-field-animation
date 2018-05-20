@@ -1,6 +1,6 @@
 # Leaflet Vector Field Animation
 
-**Raster to Animated Vector** | **Updated: 05/17/2018** | **ASCII Raster Data (*.asc)** | **Contributor:** [Brian Katz](https://github.com/briangkatz)
+**Raster to Animated Vector** | **Updated: 05/19/2018** | **ASCII Raster Data (*.asc)** | **Contributor:** [Brian Katz](https://github.com/briangkatz)
 
 #### *WORK IN PROGRESS - MATERIAL IS STILL BEING ADDED TO PARTS 2 AND 3*
 
@@ -131,7 +131,7 @@ Step 1: Open `arag_2050_07_v_original.asc` in QGIS
 
 
 
-### 2.2 Create a "theta" raster (**&theta;**) using DEM and Aspect tools in QGIS
+### 2.2 Create a "theta" raster (**&theta;**) using the DEM Aspect tool in QGIS
 
 Step 2: From the QGIS menu, go to `Raster > Analysis > DEM (Terrain Models)`
 
@@ -142,7 +142,7 @@ Step 2: From the QGIS menu, go to `Raster > Analysis > DEM (Terrain Models)`
 
 ![arag_2050_07_v_aspect_trig.asc](img/raster_to_u_v/step2.png)
 
-Or use the following GDAL command in OSGEO4W:
+Or use the following GDAL command in OSGeo4W:
 
 ```python
 # GDAL DEM Aspect w/Trigonometric Angle
