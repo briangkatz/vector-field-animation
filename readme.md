@@ -421,7 +421,7 @@ d3.text('assets/arag_2050_07_u.asc', function (u) { // add the U data in ASCIIGr
 
 ## Acknowledgement
 
-This module is based on the Leaflet.CanvasLayer.Field library from [Victor Velarde](https://github.com/IHCantabria/Leaflet.CanvasLayer.Field). Special thanks to [Bo Zhao](https://www.github.com/jakobzhao/) for his encouragement and passion for inspiring students to pursue new ideas.
+This module is based on the Leaflet.CanvasLayer.Field library from [Victor Velarde](https://github.com/IHCantabria/Leaflet.CanvasLayer.Field).
 
 ## References
 
